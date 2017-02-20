@@ -1,3 +1,3 @@
-gradlew.bat assembleRelease
+call gradlew.bat assembleRelease
 
-adb install "C:\Users\pcjeu\git\dnoAppCalcCap\android\app\build\outputs\apk\app-release.apk"
+adb install -r "C:\Users\pcjeu\git\dnoAppCalcCap\android\app\build\outputs\apk\app-release.apk"

@@ -20,16 +20,19 @@ import {
 } from 'react-native-material-ui';
 import CalculatorPage from './pages/CalculatorPage';
 import SpecificPage from './pages/SpecificPage';
+import VMASetterPage from './pages/VMASetterPage';
 import VmaPage from './pages/VmaPage';
 
 
 export default class dnoAppCalcCap extends Component {
 
-static get defaultProps() {
-    return {
-      vma: 16.5
-    };
+  componentDidMount() {
+    
   }
+
+  state = {
+     route : 'specificpage',
+  };
 
   constructor(props) {
         super(props);
@@ -51,7 +54,7 @@ static get defaultProps() {
                 <Navigator
                     ref="navigator"
                     style={styles.container}
-                    initialRoute={{ id: 'calculatorpage' }}
+                    initialRoute={{ id: this.state.route }}
                     renderScene={this.renderScene}
                     configureScene={this.configureScene}
                 />
@@ -64,21 +67,12 @@ static get defaultProps() {
 
   renderNavigationView() {
         
-        const route = 'calculatorpage';
+      
        
         return(
             <Drawer>
               <Drawer.Header>
-                    <Drawer.Header.Account
-                        avatar={<Avatar icon={'account-box'} />}
-                        footer={{
-                                dense: true,
-                                centerElement: {
-                                    primaryText: this.props.vma,
-                                    secondaryText: ' ',
-                                },
-                            }}>
-                    </Drawer.Header.Account>
+                    <Drawer.Header.Account avatar={<Avatar icon={'account-box'} />}></Drawer.Header.Account>
                 </Drawer.Header>
                 <Drawer.Section
                     divider
@@ -86,20 +80,26 @@ static get defaultProps() {
                     {
                         icon: 'timer',
                         value: 'Calculator',
-                        active: !route || route === 'calculatorpage',
-                        onPress: () => this.changeScene('calculatorpage', {vma : this.props.vma})
+                        active: !this.state.route || this.state.route === 'calculatorpage',
+                        onPress: () => this.changeScene('calculatorpage')
                     },
                     {
                         icon: 'directions-walk',
                         value: 'Specific',
-                        active: !route || route === 'specificpage',
-                        onPress: () => this.changeScene('specificpage', {vma : this.props.vma})
+                        active: !this.state.route || this.state.route === 'specificpage',
+                        onPress: () => this.changeScene('specificpage')
                     },
                     {
                         icon: 'directions-run',
                         value: 'VMA',
-                        active: !route || route === 'vmapage',
-                        onPress: () => this.changeScene('vmapage', {vma : this.props.vma})
+                        active: !this.state.route || this.state.route === 'vmapage',
+                        onPress: () => this.changeScene('vmapage')
+                    },
+                    {
+                        icon: 'save',
+                        value: 'Set VMA',
+                        active: !this.state.route || this.state.route === 'setvmapage',
+                        onPress: () => this.changeScene('setvmapage')
                     },
                     {
                         icon: 'settings-power',
@@ -108,12 +108,13 @@ static get defaultProps() {
                     }
                     ]}
                 />
-                <Text style={styles.footer}>VMA: {this.props.vma}</Text>
+                <Text style={styles.footer}>Version 0.0.2</Text>
             </Drawer>
         );
     }
 
     changeScene(path, args) {
+        this.setState({route: path});
         this.refs.navigator.resetTo(Object.assign({ id: path }, args));
         this.refs.drawer.closeDrawer()
     }
@@ -137,6 +138,9 @@ static get defaultProps() {
 
             case 'specificpage': 
                 return <SpecificPage/>;
+
+            case 'setvmapage': 
+                return <VMASetterPage/>;
 
             case 'vmapage':
             default:

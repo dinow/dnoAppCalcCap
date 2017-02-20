@@ -8,6 +8,9 @@ export default class VmaPage extends Component {
     };
   }
 
+  
+
+
   render() {
     return (
       <View>

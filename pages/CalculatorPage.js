@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Button, Alert } from 'react-native';
+import { View, Text, TextInput, Button, Alert, TimePickerAndroid } from 'react-native';
 
 
 export default class CalculatorPage extends Component {
@@ -7,7 +7,7 @@ export default class CalculatorPage extends Component {
 
   constructor(props) {
     super(props);
-    this.title = 'CalculatorPage'
+    this.title = 'Pace Calculator'
     this.placeholders = { 
       kms: 'Kms',
       time: 'Time (hh:MM:ss)',
@@ -15,7 +15,7 @@ export default class CalculatorPage extends Component {
       allure: 'min/Km'
     };
     this.state = {
-      kms: '10',
+      kms: '',
       time: '',
       speed: '',
       allure: ''
@@ -50,7 +50,7 @@ export default class CalculatorPage extends Component {
           outAllure = this.toTime(secondsForOneKilo);
 			  }
         if(hasAllure){//Calcul du temps à mettre pour cette distance à cette allure
-				  secondsForOneKilo = this.getTotSecs(crInput.getAllure());
+				  secondsForOneKilo = this.getTotSecs(this.state.allure);
 				  totalSecondForDistance = ikms * secondsForOneKilo;
 				  outTime = this.toTime(totalSecondForDistance);
 			  }
@@ -131,38 +131,50 @@ export default class CalculatorPage extends Component {
   render() {
     return (
       <View>
-        <Text>{this.title}</Text>
+        <View style={{padding: 10}}>
+          <Text style={{padding: 10, fontSize: 24}}>{this.title}</Text>
+        </View>
+        <View style={{padding: 10}}>
         <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          style={{height: 40, padding: 10, borderColor: 'gray', borderWidth: 1}}
           onChangeText={(text) => this.setState({kms:text})}
           keyboardType='numeric'
           value={this.state.kms}
           placeholder={this.placeholders.kms}
         />
+      </View>
+        <View style={{padding: 10}}>
         <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          style={{height: 40, padding: 10, borderColor: 'gray', borderWidth: 1}}
           onChangeText={(text) => this.setState({time:text})}
           value={this.state.time}
           placeholder={this.placeholders.time}
         />
+     </View>
+        <View style={{padding: 10}}>
         <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          style={{height: 40, padding: 10, borderColor: 'gray', borderWidth: 1}}
           onChangeText={(text) => this.setState({speed:text})}
           value={this.state.speed}
           placeholder={this.placeholders.speed}
         />
+       </View>
+        <View style={{padding: 10}}>
         <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          style={{height: 40, padding: 10, borderColor: 'gray', borderWidth: 1}}
           onChangeText={(text) => this.setState({allure:text})}
           value={this.state.allure}
           placeholder={this.placeholders.allure}
         />
+      </View>
+        <View style={{padding: 10}}>
         <Button
           onPress={this._handlePress.bind(this)}
           title="Go"
           color="#CDCDCD"
           accessibilityLabel="Process calculation"
         />
+      </View>
       </View>
     )
   }
