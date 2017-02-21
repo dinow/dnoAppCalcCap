@@ -1,46 +1,41 @@
-import {
-  AsyncStorage, 
-  ToastAndroid
+import Storage from 'react-native-storage';
+import { 
+    ToastAndroid, 
+    AsyncStorage 
 } from 'react-native';
 
-const STORAGE_KEY = 'AppCalculator_user_vma';
-
-class DataHandler{
-    vma = 10;
-
-    constructor(props){
-           this._loadInitialState();
-       }
-
-
-    getVma = function(){
-        return this.vma;
+var storage = new Storage({
+    storageBackend: AsyncStorage,
+    defaultExpires: null,
+    enableCache: true,
+    sync : {
+        // we'll talk about the details later.
     }
+})  
 
-    _loadInitialState = async() =>{
-        ToastAndroid.show('Loading VMA...', ToastAndroid.SHORT);
-        try {
-        var value = await AsyncStorage.getItem(STORAGE_KEY);
-        ToastAndroid.show('Value is ...' + value, ToastAndroid.LONG);
-        if (value !== null){
-        this.vma= parseFloat(value);
-        } else {
-        this.vma = 14;
-        }
-        } catch (error) {
-        ToastAndroid.show('Error: ' + error.message, ToastAndroid.LONG);
-        }
+export default class StorageHelper {
+    state = {
+        stored_vma: 16,
     };
 
-    saveVMA = async (current_vma) => {
-        try {
-            ToastAndroid.show('Saving VMA ('+current_vma+')...', ToastAndroid.SHORT);
-            await AsyncStorage.setItem(STORAGE_KEY, ''+current_vma);
-        } catch (error) {
-            ToastAndroid.show('Error: ' + error.message, ToastAndroid.LONG);
-        }
+    getVMA(){
+        return storage.load({
+            key: 'AppCalculatorUserVma',
+            autoSync: true,
+            syncInBackground: true,
+            syncParams: {
+            },
+        })
+    }
+
+    setVMA = async (input_vma) => {
+        ToastAndroid.show('Saving: ' + input_vma, ToastAndroid.SHORT);
+        storage.save({
+            key: 'AppCalculatorUserVma',
+            rawData: { 
+            savedVma: input_vma
+            }
+        });
     }
 
 }
-
-export default DataHandler

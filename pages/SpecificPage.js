@@ -1,16 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, Navigator, Slider, StyleSheet, AsyncStorage, Picker } from 'react-native';
-import Storage from 'react-native-storage';
+import { View, Text, Navigator, Slider, StyleSheet, Picker } from 'react-native';
+import StorageHelper from '../common/data';
 import CalcHelper from './CalcHelper';
-
-var storage = new Storage({
-    storageBackend: AsyncStorage,
-    defaultExpires: null,
-    enableCache: true,
-    sync : {
-        // we'll talk about the details later.
-    }
-})  
 
 
 export default class SpecificPage extends Component {
@@ -33,14 +24,13 @@ export default class SpecificPage extends Component {
     allure2: '6:45'
   };
 
+   componentDidMount() {
+      this.getVMA();
+     
+    }
+
   getVMA(){
-    storage.load({
-      key: 'AppCalculatorUserVma',
-      autoSync: true,
-      syncInBackground: true,
-      syncParams: {
-      },
-    }).then(ret => {
+    StorageHelper.getVMA().then(ret => {
       if (ret != null){
         this.setState({vma:ret.savedVma});
         this.updateValues('800');
@@ -115,10 +105,7 @@ export default class SpecificPage extends Component {
     return [50,55];
   }
 
-  componentDidMount() {
-      this.getVMA();
-     
-    }
+ 
 
 
   render() {
@@ -147,16 +134,16 @@ export default class SpecificPage extends Component {
         </Picker>
         </View>
         <View style={{padding: 5}}>
-          <Text style={{padding: 10, fontSize: 14}}>% VMA</Text>
-          <Text style={{padding: 10, fontSize: 16}}>{this.state.perc1} - {this.state.perc2}</Text>
+          <Text style={{padding: 4, fontSize: 14, fontWeight: bold}}>% VMA</Text>
+          <Text style={{padding: 4, fontSize: 16}}>{this.state.perc1} - {this.state.perc2}</Text>
         </View>
         <View style={{padding: 5}}>
-          <Text style={{padding: 10, fontSize: 14}}>Temps</Text>
-          <Text style={{padding: 10, fontSize: 16}}>{this.state.temps1} - {this.state.temps2}</Text>
+          <Text style={{padding: 4, fontSize: 14, fontWeight: bold}}>Temps</Text>
+          <Text style={{padding: 4, fontSize: 16}}>{this.state.temps1} - {this.state.temps2}</Text>
         </View>
         <View style={{padding: 5}}>
-          <Text style={{padding: 10, fontSize: 14}}>min/km</Text>
-          <Text style={{padding: 10, fontSize: 16}}>{this.state.allure1} - {this.state.allure2}</Text>
+          <Text style={{padding: 4, fontSize: 14, fontWeight: bold}}>min/km</Text>
+          <Text style={{padding: 4, fontSize: 16}}>{this.state.allure1} - {this.state.allure2}</Text>
         </View>
       </View>
     )
