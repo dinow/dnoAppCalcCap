@@ -1,132 +1,113 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Button, Alert, TimePickerAndroid } from 'react-native';
-
+import { View, Text, TextInput, Button, Alert} from 'react-native';
+import DatePicker from 'react-native-datepicker';
+import CalcHelper from './CalcHelper';
 
 export default class CalculatorPage extends Component {
   
-
-  constructor(props) {
-    super(props);
-    this.title = 'Pace Calculator'
-    this.placeholders = { 
-      kms: 'Kms',
-      time: 'Time (hh:MM:ss)',
-      speed: 'Km/h',
-      allure: 'min/Km'
-    };
-    this.state = {
-      kms: '',
-      time: '',
-      speed: '',
-      allure: ''
+    constructor(props) {
+        super(props);
+        this.title = 'Pace Calculator'
+        this.placeholders = { 
+            kms: 'Kms',
+            time: 'Time (hh:MM:ss)',
+            speed: 'Km/h',
+            allure: 'min/Km'
+        };
     }
-  }
+    
+    state = {
+        kms: '',
+        time: '',
+        speed: '',
+        allure: ''
+    }
+  
 
-  _handlePress(event) {
+    _handlePress(event) {
+        hasKms = this.state.kms != '';
+        hasTime = this.state.time != '';
+        hasSpeed = this.state.speed != '';
+        hasAllure = this.state.allure != '';
 
-    hasKms = this.state.kms != '';
-    hasTime = this.state.time != '';
-    hasSpeed = this.state.speed != '';
-    hasAllure = this.state.allure != '';
+        outKms = '';
+        outTime = '';
+        outSpeed = '';
+        outAllure = '';
 
-    outKms = '';
-    outTime = '';
-    outSpeed = '';
-    outAllure = '';
-
-    if(hasKms){//on a les kms
-      outKms = this.state.kms;
-		  ikms = parseInt(this.state.kms);
-      if(hasSpeed){//Calcul du temps à mettre pour cette distance à cette vitesse
+        if(hasKms){//on a les kms
+            outKms = this.state.kms;
+		    ikms = parseInt(this.state.kms);
+            if(hasSpeed){//Calcul du temps à mettre pour cette distance à cette vitesse
 				speed = parseInt(this.state.speed);
 				secondsForOneKilo = 3600 / speed;
 				totalSecondForDistance = ikms * secondsForOneKilo;
-        outTime = this.toTime(totalSecondForDistance);
+                outTime = CalcHelper.toTime(totalSecondForDistance);
 			}
-			  if(hasTime){ 
-				  secondsTotal = this.getTotSecs(this.state.time);
-				  secondsForOneKilo = secondsTotal / ikms;
-				  outSpeed = this.toDoubleDecimal(3600/secondsForOneKilo);
-          outAllure = this.toTime(secondsForOneKilo);
-			  }
-        if(hasAllure){//Calcul du temps à mettre pour cette distance à cette allure
-				  secondsForOneKilo = this.getTotSecs(this.state.allure);
-				  totalSecondForDistance = ikms * secondsForOneKilo;
-				  outTime = this.toTime(totalSecondForDistance);
-			  }
-    }
+			if(hasTime){ 
+				secondsTotal = CalcHelper.getTotSecs(this.state.time);
+				secondsForOneKilo = secondsTotal / ikms;
+				outSpeed = CalcHelper.toDoubleDecimal(3600/secondsForOneKilo);
+                outAllure = CalcHelper.toTime(secondsForOneKilo);
+			}
+            if(hasAllure){//Calcul du temps à mettre pour cette distance à cette allure
+				secondsForOneKilo = CalcHelper.getTotSecs(this.state.allure);
+				totalSecondForDistance = ikms * secondsForOneKilo;
+				outTime = CalcHelper.toTime(totalSecondForDistance);
+			}
+        }
 
-  if (hasTime){//on a le temps
-			outTime = this.state.time;
-			totalTime = this.getTotSecs(this.state.time);
+        if (hasTime){//on a le temps
+		    outTime = this.state.time;
+			totalTime = CalcHelper.getTotSecs(this.state.time);
 			if(hasSpeed){
 				ispeed = parseInt(this.state.speed);
 				secondsForOneKilo = 3600 / ispeed;
-				outKms = this.toDoubleDecimal(totalTime/secondsForOneKilo);
+				outKms = CalcHelper.toDoubleDecimal(totalTime/secondsForOneKilo);
 			}
 
 			if(hasAllure){//Calcul du temps à mettre pour cette distance à cette allure
-				secondsForOneKilo = this.getTotSecs(this.state.allure);
-				outKms = this.toDoubleDecimal(totalTime/secondsForOneKilo);
+				secondsForOneKilo = CalcHelper.getTotSecs(this.state.allure);
+				outKms = CalcHelper.toDoubleDecimal(totalTime/secondsForOneKilo);
 			}
 		}
 
-    if(hasAllure){//on a l'allure
+        if(hasAllure){//on a l'allure
 			outAllure = this.state.allure;
-			totSeconds = this.getTotSecs(this.state.allure);
-			outSpeed = this.toDoubleDecimal(3600/totSeconds);
+			totSeconds = CalcHelper.getTotSecs(this.state.allure);
+			outSpeed = CalcHelper.toDoubleDecimal(3600/totSeconds);
 		}
 		if(hasSpeed){//on a la vitesse
 			outSpeed = this.state.speed;
 			ispeed = parseInt(this.state.speed);
 			secondsForOneKilo = 3600 / ispeed;
-			outAllure = this.toTime(secondsForOneKilo);
+			outAllure = CalcHelper.toTime(secondsForOneKilo);
 		}
 
-    this.setState({kms:outKms});
-    this.setState({time:outTime});
-    this.setState({speed:outSpeed});
-    this.setState({allure:outAllure});
+        this.setState({kms:outKms});
+        this.setState({time:outTime});
+        this.setState({speed:outSpeed});
+        this.setState({allure:outAllure});
+    }
 
-   }
-  
+    showPicker = async (stateKey, options) => {
+        try {
+            const {action, minute, hour} = await TimePickerAndroid.open(options);
+            var newState = {};
+            if (action === TimePickerAndroid.timeSetAction) {
+                newState[stateKey + 'Text'] = _formatTime(hour, minute);
+                newState[stateKey + 'Hour'] = hour;
+                newState[stateKey + 'Minute'] = minute;
+            } else if (action === TimePickerAndroid.dismissedAction) {
+                newState[stateKey + 'Text'] = 'dismissed';
+            }
+            this.setState(newState);
+        } catch ({code, message}) {
+            console.warn(`Error in example '${stateKey}': `, message);
+        }
+    };
 
-   getTotSecs(strTime){
-    arrayOfString = strTime.split(":");
-		hour = 0;
-		minutes = 0;
-		seconds = 0;
-		if (arrayOfString.length == 3){
-			hour = parseInt(arrayOfString[0]);
-			minutes = parseInt(arrayOfString[1]);
-			seconds = parseInt(arrayOfString[2]);
-		}
-		if (arrayOfString.length == 2){
-			minutes = parseInt(arrayOfString[0]);
-			seconds = parseInt(arrayOfString[1]);
-		}else if (arrayOfString.length == 1){
-			seconds = parseInt(arrayOfString[0]);
-		}
-		return parseInt(60.0 * (60.0 * hour) + 60.0 * minutes + seconds);
-   }
 
-   toDoubleDecimal(iseconds){
-     return iseconds.toFixed(2);
-   }
-
-   toDoubleDigit(paramInt){
-     if (paramInt < 10){
-			return "0" + paramInt;
-		}
-		return ""+paramInt;
-   }
-
-   toTime(totalSeconds){
-      hours = Math.floor(parseInt(totalSeconds) / 3600.0);
-		  minutes = Math.floor(parseInt(totalSeconds) % 3600 / 60);
-		  seconds = Math.floor(parseInt(totalSeconds)% 60.0);
-		  return this.toDoubleDigit(hours) + ":" + this.toDoubleDigit(minutes) + ":" + this.toDoubleDigit(seconds);
-   }
 
   render() {
     return (
@@ -144,12 +125,29 @@ export default class CalculatorPage extends Component {
         />
       </View>
         <View style={{padding: 10}}>
-        <TextInput
-          style={{height: 40, padding: 10, borderColor: 'gray', borderWidth: 1}}
-          onChangeText={(text) => this.setState({time:text})}
-          value={this.state.time}
-          placeholder={this.placeholders.time}
-        />
+        
+        <DatePicker
+        style={{width: 200}}
+        date={this.state.time}
+        mode="time"
+        placeholder="select time"
+        format="mm:ss"
+        confirmBtnText="Confirm"
+        cancelBtnText="Cancel"
+        customStyles={{
+          dateIcon: {
+            position: 'absolute',
+            left: 0,
+            top: 4,
+            marginLeft: 0
+          },
+          dateInput: {
+            marginLeft: 36
+          }
+          // ... You can check the source to find the other keys.
+        }}
+        onDateChange={(date) => {this.setState({time: date})}}
+      />
      </View>
         <View style={{padding: 10}}>
         <TextInput
@@ -178,4 +176,4 @@ export default class CalculatorPage extends Component {
       </View>
     )
   }
-}
+}    

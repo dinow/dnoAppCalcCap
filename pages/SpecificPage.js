@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Navigator, Slider, StyleSheet, Picker } from 'react-native';
+import { View, Text, Navigator, Slider, StyleSheet, Picker, ToastAndroid } from 'react-native';
 import StorageHelper from '../common/data';
 import CalcHelper from './CalcHelper';
 
@@ -56,21 +56,23 @@ export default class SpecificPage extends Component {
     var temps = [];
     var allures = [];
     var percentages = [];
+    var secsForDist = [];
+    
     pourcs.forEach(function processPout(percentage){
-	      speed = (this.state.vma*percentage)/100;
-				secondsForOneKilo = 3600 / speed;
-				secondsForDistance = 0;
-				secondsForDistanceStr = "";
-				minperkm = CalcHelper.toTime(secondsForOneKilo);
+	    speed = (this.state.vma*percentage)/100;
+        secondsForOneKilo = 3600 / speed;
+        secondsForDistance = 0;
+        secondsForDistanceStr = "";
+        minperkm = CalcHelper.toTime(secondsForOneKilo);
 
-					currentDistance = this.state.vma/1000;
-					secondsForDistance = currentDistance * (3600/speed);
-					secondsForDistanceStr = CalcHelper.toTime(secondsForDistance);
-
-					percentages.push(percentage+"%");
-					temps.push(secondsForDistanceStr+"");
-					allures.push(minperkm);
+        currentDistance = parseInt(dst)/1000;
+        secondsForDistance = currentDistance * (3600/speed);
+        secondsForDistanceStr = CalcHelper.toTime(secondsForDistance);
+        percentages.push(percentage+"%");
+        temps.push(secondsForDistanceStr+"");
+        allures.push(minperkm);
     }, this);
+
     this.setState({allure1: allures[0]});
     this.setState({allure2: allures[1]});
     this.setState({temps1: temps[0]});
@@ -80,30 +82,30 @@ export default class SpecificPage extends Component {
 
   }
 
-  getPourcentages(dst){
-    if (dst == '800'){
-     return [120,125];
-    } else if (dst == '1000'){
-     return [105,115];
-		} else if (dst == '1500'){
-     return [101,111];
-		} else if (dst == '2000'){
-     return [98,102];
-		} else if (dst == '3000'){
-     return [95,100];
-		} else if (dst == '5000'){
-     return [86,95];
-		} else if (dst == '10000'){
-     return [85,90];
-		} else if (dst == '20000'){
-     return [78,85];
-		} else if (dst == '21100'){
-     return [78,85];
-		} else if (dst == '42195'){
-     return [72,80];
+    getPourcentages(dst){
+        if (dst == '800'){
+            return [120,125];
+        } else if (dst == '1000'){
+            return [105,115];
+        } else if (dst == '1500'){
+            return [101,111];
+        } else if (dst == '2000'){
+            return [98,102];
+        } else if (dst == '3000'){
+            return [95,100];
+        } else if (dst == '5000'){
+            return [86,95];
+        } else if (dst == '10000'){
+            return [85,90];
+        } else if (dst == '20000'){
+            return [78,85];
+        } else if (dst == '21100'){
+            return [78,85];
+        } else if (dst == '42195'){
+            return [72,80];
+        }
+        return [50,55];
     }
-    return [50,55];
-  }
 
  
 
@@ -134,15 +136,15 @@ export default class SpecificPage extends Component {
         </Picker>
         </View>
         <View style={{padding: 5}}>
-          <Text style={{padding: 4, fontSize: 14, fontWeight: bold}}>% VMA</Text>
+          <Text style={{padding: 4, fontSize: 14, fontWeight: 'bold'}}>% VMA</Text>
           <Text style={{padding: 4, fontSize: 16}}>{this.state.perc1} - {this.state.perc2}</Text>
         </View>
         <View style={{padding: 5}}>
-          <Text style={{padding: 4, fontSize: 14, fontWeight: bold}}>Temps</Text>
+          <Text style={{padding: 4, fontSize: 14, fontWeight: 'bold'}}>Temps</Text>
           <Text style={{padding: 4, fontSize: 16}}>{this.state.temps1} - {this.state.temps2}</Text>
         </View>
         <View style={{padding: 5}}>
-          <Text style={{padding: 4, fontSize: 14, fontWeight: bold}}>min/km</Text>
+          <Text style={{padding: 4, fontSize: 14, fontWeight: 'bold'}}>min/km</Text>
           <Text style={{padding: 4, fontSize: 16}}>{this.state.allure1} - {this.state.allure2}</Text>
         </View>
       </View>

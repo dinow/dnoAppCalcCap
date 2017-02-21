@@ -31,7 +31,7 @@ export default class dnoAppCalcCap extends Component {
   }
 
   state = {
-     route : 'specificpage',
+     route : 'calculatorpage',
   };
 
   constructor(props) {

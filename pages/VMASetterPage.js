@@ -10,16 +10,16 @@ export default class VMASetterPage extends Component {
     };
   }
 
-  constructor(props) {
+    constructor(props) {
         super(props);
-  }
+    }
 
-  state = {
-    stored_vma: 16,
-  };
+    state = {
+        stored_vma: 16,
+    };
 
     componentDidMount() {
-      StorageHelper.getVMA().then(ret => {
+        StorageHelper.getVMA().then(ret => {
             if (ret != null){
                 this.setState({stored_vma:ret.savedVma});
             }else{

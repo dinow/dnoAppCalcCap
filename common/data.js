@@ -14,11 +14,8 @@ var storage = new Storage({
 })  
 
 export default class StorageHelper {
-    state = {
-        stored_vma: 16,
-    };
 
-    getVMA(){
+    static getVMA(){
         return storage.load({
             key: 'AppCalculatorUserVma',
             autoSync: true,
@@ -28,7 +25,7 @@ export default class StorageHelper {
         })
     }
 
-    setVMA = async (input_vma) => {
+    static setVMA = async (input_vma) => {
         ToastAndroid.show('Saving: ' + input_vma, ToastAndroid.SHORT);
         storage.save({
             key: 'AppCalculatorUserVma',
