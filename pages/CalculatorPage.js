@@ -90,25 +90,6 @@ export default class CalculatorPage extends Component {
         this.setState({allure:outAllure});
     }
 
-    showPicker = async (stateKey, options) => {
-        try {
-            const {action, minute, hour} = await TimePickerAndroid.open(options);
-            var newState = {};
-            if (action === TimePickerAndroid.timeSetAction) {
-                newState[stateKey + 'Text'] = _formatTime(hour, minute);
-                newState[stateKey + 'Hour'] = hour;
-                newState[stateKey + 'Minute'] = minute;
-            } else if (action === TimePickerAndroid.dismissedAction) {
-                newState[stateKey + 'Text'] = 'dismissed';
-            }
-            this.setState(newState);
-        } catch ({code, message}) {
-            console.warn(`Error in example '${stateKey}': `, message);
-        }
-    };
-
-
-
   render() {
     return (
       <View>
@@ -125,13 +106,13 @@ export default class CalculatorPage extends Component {
         />
       </View>
         <View style={{padding: 10}}>
-        
+        <Text>Target Time</Text>
         <DatePicker
         style={{width: 200}}
         date={this.state.time}
         mode="time"
-        placeholder="select time"
-        format="mm:ss"
+        placeholder="Target time"
+        format="HH:mm"
         confirmBtnText="Confirm"
         cancelBtnText="Cancel"
         customStyles={{
@@ -146,7 +127,7 @@ export default class CalculatorPage extends Component {
           }
           // ... You can check the source to find the other keys.
         }}
-        onDateChange={(date) => {this.setState({time: date})}}
+        onDateChange={(date) => {this.setState({time: String(date+':00')})}}
       />
      </View>
         <View style={{padding: 10}}>
@@ -158,12 +139,29 @@ export default class CalculatorPage extends Component {
         />
        </View>
         <View style={{padding: 10}}>
-        <TextInput
-          style={{height: 40, padding: 10, borderColor: 'gray', borderWidth: 1}}
-          onChangeText={(text) => this.setState({allure:text})}
-          value={this.state.allure}
-          placeholder={this.placeholders.allure}
-        />
+            <Text>Pace</Text>
+        <DatePicker
+        style={{width: 200}}
+        date={this.state.allure}
+        mode="time"
+        placeholder="Pace"
+        format="HH:mm"
+        confirmBtnText="Confirm"
+        cancelBtnText="Cancel"
+        customStyles={{
+          dateIcon: {
+            position: 'absolute',
+            left: 0,
+            top: 4,
+            marginLeft: 0
+          },
+          dateInput: {
+            marginLeft: 36
+          }
+          // ... You can check the source to find the other keys.
+        }}
+        onDateChange={(date) => {this.setState({allure: String(date)})}}
+      />
       </View>
         <View style={{padding: 10}}>
         <Button
