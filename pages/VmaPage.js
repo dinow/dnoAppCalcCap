@@ -4,11 +4,11 @@ import StorageHelper from '../common/data';
 import CalcHelper from './CalcHelper';
 
 export default class VmaPage extends Component {
-  static get defaultProps() {
-    return {
-      title: 'VMA'
-    };
-  }
+
+    constructor(props) {
+        super(props);
+        this.title = 'VMA Pace';
+    }
 
 state = {
     vma: 10,
@@ -58,7 +58,7 @@ updateValues(dst){
         secondsForOneKilo = 3600 / speed;
         secondsForDistance = 0;
         secondsForDistanceStr = "";
-        minperkm = CalcHelper.toTime(secondsForOneKilo);
+        minperkm = CalcHelper.toTime(secondsForOneKilo, false);
 
         if (dst == "30/30"){
             secondsForDistance = (speed*1000/3600)*30;
@@ -66,11 +66,11 @@ updateValues(dst){
         }else if (dst == "Endurance"){
             currentDistance = 1;
             secondsForDistance = currentDistance * (3600/speed);
-            secondsForDistanceStr = CalcHelper.toTime(secondsForDistance);
+            secondsForDistanceStr = CalcHelper.toTime(secondsForDistance, false);
         }else{
             currentDistance = parseInt(dst)/1000;
             secondsForDistance = currentDistance * (3600/speed);
-            secondsForDistanceStr = CalcHelper.toTime(secondsForDistance);
+            secondsForDistanceStr = CalcHelper.toTime(secondsForDistance, false);
         }
 		percentages.push(percentage+"%");
 		temps.push(secondsForDistanceStr+"");
@@ -111,7 +111,7 @@ getPourcentages(dst){
 
   render() {
     return (
-      <View>
+      <View style={{backgroundColor: '#F6F4D2'}}>
         <View style={{padding: 10}}>
           <Text style={{padding: 10, fontSize: 22}}>{this.title}</Text>
         </View>

@@ -20,15 +20,31 @@ export default class CalculatorPage extends Component {
         kms: '',
         time: '',
         speed: '',
-        allure: ''
+        allure: '',
+        allure_set: false,
+        time_set: false
     }
   
 
+    resetPace(event) {
+        this.setState({
+            allure_set: false, 
+            allure: '00:00'
+        })
+    }
+
+    resetTime(event) {
+        this.setState({
+            time_set: false, 
+            time: '00:00'
+        })
+    }
+
     _handlePress(event) {
         hasKms = this.state.kms != '';
-        hasTime = this.state.time != '';
+        hasTime = this.state.time_set;
         hasSpeed = this.state.speed != '';
-        hasAllure = this.state.allure != '';
+        hasAllure = this.state.allure_set;
 
         outKms = '';
         outTime = '';
@@ -42,18 +58,18 @@ export default class CalculatorPage extends Component {
 				speed = parseInt(this.state.speed);
 				secondsForOneKilo = 3600 / speed;
 				totalSecondForDistance = ikms * secondsForOneKilo;
-                outTime = CalcHelper.toTime(totalSecondForDistance);
+                outTime = CalcHelper.toTime(totalSecondForDistance, false);
 			}
 			if(hasTime){ 
 				secondsTotal = CalcHelper.getTotSecs(this.state.time);
 				secondsForOneKilo = secondsTotal / ikms;
 				outSpeed = CalcHelper.toDoubleDecimal(3600/secondsForOneKilo);
-                outAllure = CalcHelper.toTime(secondsForOneKilo);
+                outAllure = CalcHelper.toTime(secondsForOneKilo, true);
 			}
             if(hasAllure){//Calcul du temps à mettre pour cette distance à cette allure
 				secondsForOneKilo = CalcHelper.getTotSecs(this.state.allure);
 				totalSecondForDistance = ikms * secondsForOneKilo;
-				outTime = CalcHelper.toTime(totalSecondForDistance);
+				outTime = CalcHelper.toTime(totalSecondForDistance, false);
 			}
         }
 
@@ -81,7 +97,7 @@ export default class CalculatorPage extends Component {
 			outSpeed = this.state.speed;
 			ispeed = parseInt(this.state.speed);
 			secondsForOneKilo = 3600 / ispeed;
-			outAllure = CalcHelper.toTime(secondsForOneKilo);
+			outAllure = CalcHelper.toTime(secondsForOneKilo, true);
 		}
 
         this.setState({kms:outKms});
@@ -92,7 +108,7 @@ export default class CalculatorPage extends Component {
 
   render() {
     return (
-      <View>
+      <View style={{backgroundColor: '#F6F4D2', flex:1}}>
         <View style={{padding: 10}}>
           <Text style={{padding: 10, fontSize: 24}}>{this.title}</Text>
         </View>
@@ -105,13 +121,13 @@ export default class CalculatorPage extends Component {
           placeholder={this.placeholders.kms}
         />
       </View>
-        <View style={{padding: 10}}>
+        <View style={{padding: 10, flexDirection: 'row', justifyContent: 'space-between'}}>
         <Text>Target Time</Text>
         <DatePicker
         style={{width: 200}}
         date={this.state.time}
         mode="time"
-        placeholder="Target time"
+        placeholder="Time"
         format="HH:mm"
         confirmBtnText="Confirm"
         cancelBtnText="Cancel"
@@ -127,8 +143,16 @@ export default class CalculatorPage extends Component {
           }
           // ... You can check the source to find the other keys.
         }}
-        onDateChange={(date) => {this.setState({time: String(date+':00')})}}
+        onDateChange={(date) => {this.setState({
+            time_set: true, 
+            time: String(date+':00')})}}
       />
+      <Button
+          onPress={this.resetTime.bind(this)}
+          title="Reset"
+          color="#A44A3F"
+          accessibilityLabel="Reset"
+        />
      </View>
         <View style={{padding: 10}}>
         <TextInput
@@ -138,7 +162,7 @@ export default class CalculatorPage extends Component {
           placeholder={this.placeholders.speed}
         />
        </View>
-        <View style={{padding: 10}}>
+        <View style={{padding: 10, flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text>Pace</Text>
         <DatePicker
         style={{width: 200}}
@@ -158,16 +182,24 @@ export default class CalculatorPage extends Component {
           dateInput: {
             marginLeft: 36
           }
-          // ... You can check the source to find the other keys.
         }}
-        onDateChange={(date) => {this.setState({allure: String(date)})}}
+        onDateChange={(date) => {this.setState({
+            allure_set: true, 
+            allure: String(date)
+        })}}
       />
+      <Button
+          onPress={this.resetPace.bind(this)}
+          title="Reset"
+          color="#A44A3F"
+          accessibilityLabel="Reset"
+        />
       </View>
         <View style={{padding: 10}}>
         <Button
           onPress={this._handlePress.bind(this)}
           title="Go"
-          color="#CDCDCD"
+          color="#CBDFBD"
           accessibilityLabel="Process calculation"
         />
       </View>

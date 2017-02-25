@@ -5,11 +5,10 @@ import CalcHelper from './CalcHelper';
 
 
 export default class SpecificPage extends Component {
-  static get defaultProps() {
-    return {
-      title: 'Specifique'
-    };
-  }
+  constructor(props) {
+        super(props);
+        this.title = 'Specific Paces';
+    }
 
   
 
@@ -63,11 +62,11 @@ export default class SpecificPage extends Component {
         secondsForOneKilo = 3600 / speed;
         secondsForDistance = 0;
         secondsForDistanceStr = "";
-        minperkm = CalcHelper.toTime(secondsForOneKilo);
+        minperkm = CalcHelper.toTime(secondsForOneKilo, false);
 
         currentDistance = parseInt(dst)/1000;
         secondsForDistance = currentDistance * (3600/speed);
-        secondsForDistanceStr = CalcHelper.toTime(secondsForDistance);
+        secondsForDistanceStr = CalcHelper.toTime(secondsForDistance, false);
         percentages.push(percentage+"%");
         temps.push(secondsForDistanceStr+"");
         allures.push(minperkm);
@@ -112,7 +111,7 @@ export default class SpecificPage extends Component {
 
   render() {
     return (
-      <View>
+      <View style={{backgroundColor: '#F6F4D2'}}>
         <View style={{padding: 10}}>
           <Text style={{padding: 10, fontSize: 22}}>{this.title}</Text>
         </View>

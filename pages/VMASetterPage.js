@@ -3,15 +3,11 @@ import StorageHelper from '../common/data';
 import { View, Text, Navigator, Slider, StyleSheet, ToastAndroid, Button, AsyncStorage } from 'react-native';
 
 export default class VMASetterPage extends Component {
-  static get defaultProps() {
-    return {
-      title: 'Set VMA',
-      storageKey: 'AppCalculatorUserVma'
-    };
-  }
+
 
     constructor(props) {
         super(props);
+        this.title = 'Set VMA';
     }
 
     state = {
@@ -23,15 +19,15 @@ export default class VMASetterPage extends Component {
             if (ret != null){
                 this.setState({stored_vma:ret.savedVma});
             }else{
-                this.setState({stored_vma:14.5});
+                this.setState({stored_vma:12.5});
             }
         }).catch(err => {
             switch (err.name) {
                 case 'NotFoundError':
-                    this.setState({stored_vma:16.5});
+                    this.setState({stored_vma:10.5});
                     break;
                 case 'ExpiredError':
-                    this.setState({stored_vma:15.5});
+                    this.setState({stored_vma:11.5});
                     break;
             }
         });
@@ -40,15 +36,15 @@ export default class VMASetterPage extends Component {
 
   render() {
     return (
-      <View>
+      <View style={{backgroundColor: '#F6F4D2'}}>
         <View style={{padding: 10}}>
           <Text style={{padding: 10, fontSize: 24}}>{this.title}</Text>
         </View>
         <View style={{padding: 10}}>
           <Text style={styles.text} >
-            {this.state.temp_vma && + this.state.temp_vma}
+            {this.state.stored_vma}
           </Text>
-          <Slider step={0.25} maximumValue={25} minimumValue={10} onValueChange={(value) => this.setState({temp_vma: value})}/>
+          <Slider step={0.25} value={this.state.stored_vma} maximumValue={25} minimumValue={10} onValueChange={(value) => this.setState({stored_vma: value})}/>
           <Button onPress={this._saveVMA.bind(this)}  title="Save" color="#CDCDCD"  accessibilityLabel="Save VMA"/>
         </View>
       </View>

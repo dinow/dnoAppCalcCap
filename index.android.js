@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         fontSize: 11,
         color: '#828282'
-    }
+    } 
 });
 
 AppRegistry.registerComponent('dnoAppCalcCap', () => dnoAppCalcCap);
