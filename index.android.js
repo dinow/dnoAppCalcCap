@@ -108,7 +108,7 @@ export default class dnoAppCalcCap extends Component {
                     }
                     ]}
                 />
-                <Text style={styles.footer}>Version 0.0.2</Text>
+                <Text style={styles.footer}>Version 1.0.0</Text>
             </Drawer>
         );
     }

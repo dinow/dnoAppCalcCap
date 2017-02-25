@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, TextInput, Button, Alert} from 'react-native';
 import DatePicker from 'react-native-datepicker';
 import CalcHelper from './CalcHelper';
-
+var my_style = require('../common/style');
 export default class CalculatorPage extends Component {
   
     constructor(props) {
@@ -108,61 +108,46 @@ export default class CalculatorPage extends Component {
 
   render() {
     return (
-      <View style={{backgroundColor: '#F6F4D2', flex:1}}>
-        <View style={{padding: 10}}>
-          <Text style={{padding: 10, fontSize: 24}}>{this.title}</Text>
+      <View style={my_style.globalView}>
+        <View style={my_style.inputRow}>
+          <Text style={my_style.pageTitle}>{this.title}</Text>
         </View>
         <View style={{padding: 10}}>
-        <TextInput
-          style={{height: 40, padding: 10, borderColor: 'gray', borderWidth: 1}}
-          onChangeText={(text) => this.setState({kms:text})}
-          keyboardType='numeric'
-          value={this.state.kms}
-          placeholder={this.placeholders.kms}
-        />
-      </View>
-        <View style={{padding: 10, flexDirection: 'row', justifyContent: 'space-between'}}>
-        <Text>Target Time</Text>
-        <DatePicker
-        style={{width: 200}}
-        date={this.state.time}
-        mode="time"
-        placeholder="Time"
-        format="HH:mm"
-        confirmBtnText="Confirm"
-        cancelBtnText="Cancel"
-        customStyles={{
-          dateIcon: {
-            position: 'absolute',
-            left: 0,
-            top: 4,
-            marginLeft: 0
-          },
-          dateInput: {
-            marginLeft: 36
-          }
-          // ... You can check the source to find the other keys.
-        }}
-        onDateChange={(date) => {this.setState({
-            time_set: true, 
-            time: String(date+':00')})}}
-      />
-      <Button
-          onPress={this.resetTime.bind(this)}
-          title="Reset"
-          color="#A44A3F"
-          accessibilityLabel="Reset"
-        />
-     </View>
+            <TextInput style={my_style.inputText} onChangeText={(text) => this.setState({kms:text})}
+            keyboardType='numeric'  value={this.state.kms}  placeholder={this.placeholders.kms} />
+        </View>
+        <View style={my_style.inputRow}>
+            <Text>Time</Text>
+            <DatePicker
+            style={{width: 200}}
+            date={this.state.time}
+            mode="time"
+            placeholder="Time"
+            format="HH:mm"
+            confirmBtnText="Confirm"
+            cancelBtnText="Cancel"
+            customStyles={{
+            dateIcon: {
+                position: 'absolute',
+                left: 0,
+                top: 4,
+                marginLeft: 0
+            },
+            dateInput: {
+                marginLeft: 36
+            }
+            // ... You can check the source to find the other keys.
+            }}
+            onDateChange={(date) => {this.setState({
+                time_set: true, 
+                time: String(date+':00')})}}
+            />
+            <Button onPress={this.resetTime.bind(this)}  title="Reset" color="#A44A3F"  accessibilityLabel="Reset" />
+        </View>
         <View style={{padding: 10}}>
-        <TextInput
-          style={{height: 40, padding: 10, borderColor: 'gray', borderWidth: 1}}
-          onChangeText={(text) => this.setState({speed:text})}
-          value={this.state.speed}
-          placeholder={this.placeholders.speed}
-        />
+            <TextInput style={my_style.inputText} onChangeText={(text) => this.setState({speed:text})} value={this.state.speed} placeholder={this.placeholders.speed}/>
        </View>
-        <View style={{padding: 10, flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View style={my_style.inputRow}>
             <Text>Pace</Text>
         <DatePicker
         style={{width: 200}}

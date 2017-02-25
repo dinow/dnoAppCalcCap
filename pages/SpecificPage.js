@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, Navigator, Slider, StyleSheet, Picker, ToastAndroid } from 'react-native';
 import StorageHelper from '../common/data';
 import CalcHelper from './CalcHelper';
-
+var my_style = require('../common/style');
 
 export default class SpecificPage extends Component {
   constructor(props) {
@@ -111,14 +111,14 @@ export default class SpecificPage extends Component {
 
   render() {
     return (
-      <View style={{backgroundColor: '#F6F4D2'}}>
-        <View style={{padding: 10}}>
-          <Text style={{padding: 10, fontSize: 22}}>{this.title}</Text>
+      <View style={my_style.globalView}>
+        <View style={my_style.inputRow}>
+          <Text style={my_style.pageTitle}>{this.title}</Text>
         </View>
-        <View style={{padding: 10}}>
+        <View style={my_style.inputRow}>
           <Text style={{padding: 10, fontSize: 20}}>VMA: {this.state.vma}</Text>
         </View>
-        <View style={{padding: 10}}>
+        <View style={my_style.piker}>
           <Picker
             selectedValue={this.state.distance}
             onValueChange={(dst) => this.updateValues(dst)}>
@@ -134,15 +134,15 @@ export default class SpecificPage extends Component {
             <Picker.Item label="42195" value="42195" />
         </Picker>
         </View>
-        <View style={{padding: 5}}>
+        <View style={my_style.inputRowBorder}>
           <Text style={{padding: 4, fontSize: 14, fontWeight: 'bold'}}>% VMA</Text>
           <Text style={{padding: 4, fontSize: 16}}>{this.state.perc1} - {this.state.perc2}</Text>
         </View>
-        <View style={{padding: 5}}>
+        <View style={my_style.inputRowBorder}>
           <Text style={{padding: 4, fontSize: 14, fontWeight: 'bold'}}>Temps</Text>
           <Text style={{padding: 4, fontSize: 16}}>{this.state.temps1} - {this.state.temps2}</Text>
         </View>
-        <View style={{padding: 5}}>
+        <View style={my_style.inputRowBorder}>
           <Text style={{padding: 4, fontSize: 14, fontWeight: 'bold'}}>min/km</Text>
           <Text style={{padding: 4, fontSize: 16}}>{this.state.allure1} - {this.state.allure2}</Text>
         </View>
@@ -150,16 +150,3 @@ export default class SpecificPage extends Component {
     )
   }
 }
-
-var styles = StyleSheet.create({
-  slider: {
-    height: 10,
-    margin: 10,
-  },
-  text: {
-    fontSize: 14,
-    textAlign: 'center',
-    fontWeight: '500',
-    margin: 10,
-  },
-});
