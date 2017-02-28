@@ -22,7 +22,7 @@ import CalculatorPage from './pages/CalculatorPage';
 import SpecificPage from './pages/SpecificPage';
 import VMASetterPage from './pages/VMASetterPage';
 import VmaPage from './pages/VmaPage';
-
+import VMAEstimatorPage from './pages/VMAEstimatorPage';
 
 export default class dnoAppCalcCap extends Component {
 
@@ -84,6 +84,12 @@ export default class dnoAppCalcCap extends Component {
                         onPress: () => this.changeScene('calculatorpage')
                     },
                     {
+                        icon: 'timer',
+                        value: 'VMA Est.',
+                        active: !this.state.route || this.state.route === 'vmaest',
+                        onPress: () => this.changeScene('vmaest')
+                    },
+                    {
                         icon: 'directions-walk',
                         value: 'Specific',
                         active: !this.state.route || this.state.route === 'specificpage',
@@ -141,6 +147,9 @@ export default class dnoAppCalcCap extends Component {
 
             case 'setvmapage': 
                 return <VMASetterPage/>;
+
+            case 'vmaest': 
+                return <VMAEstimatorPage/>;
 
             case 'vmapage':
             default:

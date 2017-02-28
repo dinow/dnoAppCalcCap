@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, Navigator, Slider, StyleSheet, Picker, ToastAndroid } from 'react-native';
 import StorageHelper from '../common/data';
 import CalcHelper from './CalcHelper';
+import Pourcentages from '../common/pourcentages';
 var my_style = require('../common/style');
 
 export default class SpecificPage extends Component {
@@ -51,13 +52,12 @@ export default class SpecificPage extends Component {
   updateValues(dst){
     this.setState({distance: dst});
 
-    var pourcs = this.getPourcentages(dst);
     var temps = [];
     var allures = [];
     var percentages = [];
     var secsForDist = [];
     
-    pourcs.forEach(function processPout(percentage){
+    Pourcentages.getPourcentages(dst, 'specific').forEach(function processPout(percentage){
 	    speed = (this.state.vma*percentage)/100;
         secondsForOneKilo = 3600 / speed;
         secondsForDistance = 0;
@@ -72,41 +72,9 @@ export default class SpecificPage extends Component {
         allures.push(minperkm);
     }, this);
 
-    this.setState({allure1: allures[0]});
-    this.setState({allure2: allures[1]});
-    this.setState({temps1: temps[0]});
-    this.setState({temps2: temps[1]});
-    this.setState({perc1: percentages[0]});
-    this.setState({perc2: percentages[1]});
+    this.setState({allure1: allures[0],allure2: allures[1],temps1: temps[0],temps2: temps[1],perc1: percentages[0],perc2: percentages[1]});
 
   }
-
-    getPourcentages(dst){
-        if (dst == '800'){
-            return [120,125];
-        } else if (dst == '1000'){
-            return [105,115];
-        } else if (dst == '1500'){
-            return [101,111];
-        } else if (dst == '2000'){
-            return [98,102];
-        } else if (dst == '3000'){
-            return [95,100];
-        } else if (dst == '5000'){
-            return [86,95];
-        } else if (dst == '10000'){
-            return [85,90];
-        } else if (dst == '20000'){
-            return [78,85];
-        } else if (dst == '21100'){
-            return [78,85];
-        } else if (dst == '42195'){
-            return [72,80];
-        }
-        return [50,55];
-    }
-
- 
 
 
   render() {
