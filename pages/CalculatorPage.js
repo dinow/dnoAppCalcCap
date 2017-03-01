@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, Button, Alert} from 'react-native';
 import DatePicker from 'react-native-datepicker';
-import CalcHelper from './CalcHelper';
+import CalcHelper from '../common/CalcHelper';
 var my_style = require('../common/style');
 export default class CalculatorPage extends Component {
   
@@ -20,31 +20,15 @@ export default class CalculatorPage extends Component {
         kms: '',
         time: '',
         speed: '',
-        allure: '',
-        allure_set: false,
-        time_set: false
-    }
-  
-
-    resetPace(event) {
-        this.setState({
-            allure_set: false, 
-            allure: '00:00'
-        })
+        allure: ''
     }
 
-    resetTime(event) {
-        this.setState({
-            time_set: false, 
-            time: '00:00'
-        })
-    }
 
     _handlePress(event) {
         hasKms = this.state.kms != '';
-        hasTime = this.state.time_set;
+        hasTime = this.state.time != '';
         hasSpeed = this.state.speed != '';
-        hasAllure = this.state.allure_set;
+        hasAllure = this.state.allure != '';
 
         outKms = '';
         outTime = '';
@@ -58,18 +42,18 @@ export default class CalculatorPage extends Component {
 				speed = parseInt(this.state.speed);
 				secondsForOneKilo = 3600 / speed;
 				totalSecondForDistance = ikms * secondsForOneKilo;
-                outTime = CalcHelper.toTime(totalSecondForDistance, false);
+                outTime = CalcHelper.toTime(totalSecondForDistance);
 			}
 			if(hasTime){ 
 				secondsTotal = CalcHelper.getTotSecs(this.state.time);
 				secondsForOneKilo = secondsTotal / ikms;
 				outSpeed = CalcHelper.toDoubleDecimal(3600/secondsForOneKilo);
-                outAllure = CalcHelper.toTime(secondsForOneKilo, true);
+                outAllure = CalcHelper.toTime(secondsForOneKilo);
 			}
             if(hasAllure){//Calcul du temps à mettre pour cette distance à cette allure
 				secondsForOneKilo = CalcHelper.getTotSecs(this.state.allure);
 				totalSecondForDistance = ikms * secondsForOneKilo;
-				outTime = CalcHelper.toTime(totalSecondForDistance, false);
+				outTime = CalcHelper.toTime(totalSecondForDistance);
 			}
         }
 
@@ -97,7 +81,7 @@ export default class CalculatorPage extends Component {
 			outSpeed = this.state.speed;
 			ispeed = parseInt(this.state.speed);
 			secondsForOneKilo = 3600 / ispeed;
-			outAllure = CalcHelper.toTime(secondsForOneKilo, true);
+			outAllure = CalcHelper.toTime(secondsForOneKilo);
 		}
 
         this.setState({kms:outKms,time:outTime,speed:outSpeed,allure:outAllure});
@@ -113,69 +97,24 @@ export default class CalculatorPage extends Component {
             <TextInput style={my_style.inputText} onChangeText={(text) => this.setState({kms:text})}
             keyboardType='numeric'  value={this.state.kms}  placeholder={this.placeholders.kms} />
         </View>
-        <View style={my_style.inputRow}>
-            <Text>Time</Text>
-            <DatePicker
-            style={{width: 200}}
-            date={this.state.time}
-            mode="time"
-            placeholder="Time"
-            format="HH:mm"
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
-            customStyles={{
-            dateIcon: {
-                position: 'absolute',
-                left: 0,
-                top: 4,
-                marginLeft: 0
-            },
-            dateInput: {
-                marginLeft: 36
-            }
-            // ... You can check the source to find the other keys.
-            }}
-            onDateChange={(date) => {this.setState({
-                time_set: true, 
-                time: String(date+':00')})}}
+        <View style={{padding: 10}}>
+           <TextInput
+                style={my_style.inputText}
+                onChangeText={(text) => this.setState({time:text})}
+                value={this.state.time}
+                placeholder={this.placeholders.time}
             />
-            <Button onPress={this.resetTime.bind(this)}  title="Reset" color="#A44A3F"  accessibilityLabel="Reset" />
         </View>
         <View style={{padding: 10}}>
             <TextInput style={my_style.inputText} onChangeText={(text) => this.setState({speed:text})} value={this.state.speed} placeholder={this.placeholders.speed}/>
        </View>
-        <View style={my_style.inputRow}>
-            <Text>Pace</Text>
-        <DatePicker
-        style={{width: 200}}
-        date={this.state.allure}
-        mode="time"
-        placeholder="Pace"
-        format="HH:mm"
-        confirmBtnText="Confirm"
-        cancelBtnText="Cancel"
-        customStyles={{
-          dateIcon: {
-            position: 'absolute',
-            left: 0,
-            top: 4,
-            marginLeft: 0
-          },
-          dateInput: {
-            marginLeft: 36
-          }
-        }}
-        onDateChange={(date) => {this.setState({
-            allure_set: true, 
-            allure: String(date)
-        })}}
-      />
-      <Button
-          onPress={this.resetPace.bind(this)}
-          title="Reset"
-          color="#A44A3F"
-          accessibilityLabel="Reset"
-        />
+        <View style={{padding: 10}}>
+        <TextInput
+                style={my_style.inputText}
+                onChangeText={(text) => this.setState({allure:text})}
+                value={this.state.allure}
+                placeholder={this.placeholders.allure}
+            />
       </View>
         <View style={{padding: 10}}>
         <Button

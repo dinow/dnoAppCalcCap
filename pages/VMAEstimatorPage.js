@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, Button, Alert, Picker} from 'react-native';
 import DatePicker from 'react-native-datepicker';
-import CalcHelper from './CalcHelper';
+import CalcHelper from '../common/CalcHelper';
 import Pourcentages from '../common/pourcentages';
 var my_style = require('../common/style');
 export default class CalculatorPage extends Component {
@@ -17,31 +17,25 @@ export default class CalculatorPage extends Component {
     state = {
         meters: '',
         time: '',
-        vma1: '',
-        vma2: '',
-        time_set: false
-    }
-
-    resetTime(event) {
-        this.setState({
-            time_set: false, 
-            time: '00:00'
-        })
+        vma1: 'vma - 1',
+        vma2: 'vma - 2'
     }
 
    
+
+   
     _handlePress(event) {
-        hasTime = this.state.time_set;
+        hasTime = this.state.time != '';
 
         var outVMA = ['.','.'];
         if (hasTime){//on a le temps
-            
             totalTimeSeconds = CalcHelper.getTotSecs(this.state.time);
             currentDistanceMeters = parseInt(this.state.meters);
-            speed = (totalTimeSeconds / currentDistanceMeters) * 3.6;
-
+            secondsForOneKilo = totalTimeSeconds / (currentDistanceMeters/1000);
+            speed = 3600/secondsForOneKilo;
+            outVMA = [];
             Pourcentages.getPourcentages(this.state.meters, 'specific').forEach(function processPout(percentage){
-                outVMA.push( percentage+'% - '+(speed / parseInt(percentage)));
+                outVMA.push( percentage+'% - '+ CalcHelper.toDoubleDecimal((speed / parseInt(percentage))*100));
             }, this);
 		} else {
             outVMA = ['-', '-'];
@@ -72,38 +66,19 @@ export default class CalculatorPage extends Component {
             <Picker.Item label="42195" value="42195" />
         </Picker>
         </View>
-        <View style={my_style.inputRow}>
-            <Text>Time</Text>
-            <DatePicker
-            style={{width: 200}}
-            date={this.state.time}
-            mode="time"
-            placeholder="Time"
-            format="HH:mm"
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
-            customStyles={{
-            dateIcon: {
-                position: 'absolute',
-                left: 0,
-                top: 4,
-                marginLeft: 0
-            },
-            dateInput: {
-                marginLeft: 36
-            }
-            }}
-            onDateChange={(date) => {this.setState({
-                time_set: true, 
-                time: String(date+':00')})}}
+        <View style={{padding: 10}}>
+            <TextInput
+                style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                onChangeText={(text) => this.setState({time:text})}
+                value={this.state.time}
+                placeholder={this.placeholders.time}
             />
-            <Button onPress={this.resetTime.bind(this)}  title="Reset" color="#A44A3F"  accessibilityLabel="Reset" />
         </View>
         <View style={{padding: 10}}>
-            <Text style={my_style.inputText} value={this.state.vma1}/>
+            <Text style={my_style.inputText} >{this.state.vma1}</Text>
         </View>
         <View style={{padding: 10}}>
-            <Text style={my_style.inputText} value={this.state.vma2}/>
+            <Text style={my_style.inputText} >{this.state.vma2}</Text>
        </View>
         <View style={{padding: 10}}>
         <Button

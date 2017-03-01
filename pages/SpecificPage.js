@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, Navigator, Slider, StyleSheet, Picker, ToastAndroid } from 'react-native';
 import StorageHelper from '../common/data';
-import CalcHelper from './CalcHelper';
+import CalcHelper from '../common/CalcHelper';
 import Pourcentages from '../common/pourcentages';
 var my_style = require('../common/style');
 
@@ -62,11 +62,11 @@ export default class SpecificPage extends Component {
         secondsForOneKilo = 3600 / speed;
         secondsForDistance = 0;
         secondsForDistanceStr = "";
-        minperkm = CalcHelper.toTime(secondsForOneKilo, false);
+        minperkm = CalcHelper.toTime(secondsForOneKilo);
 
         currentDistance = parseInt(dst)/1000;
         secondsForDistance = currentDistance * (3600/speed);
-        secondsForDistanceStr = CalcHelper.toTime(secondsForDistance, false);
+        secondsForDistanceStr = CalcHelper.toTime(secondsForDistance);
         percentages.push(percentage+"%");
         temps.push(secondsForDistanceStr+"");
         allures.push(minperkm);

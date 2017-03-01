@@ -1,16 +1,12 @@
 export default class CalcHelper {
 
-    static toTime(totalSeconds, specificHandlingForPace){
+    static toTime(totalSeconds){
         
         hours = Math.floor(parseInt(totalSeconds) / 3600.0);
 	    minutes = Math.floor(parseInt(totalSeconds) % 3600 / 60);
 	    seconds = Math.floor(parseInt(totalSeconds) % 60.0);
-        if (specificHandlingForPace){
-            //I'm using a 'hour time' to show the pace, so little trick here...
-	        return this.toDoubleDigit(minutes) + ":" + this.toDoubleDigit(seconds);
-        }else{
-             return this.toDoubleDigit(hours) + ":" + this.toDoubleDigit(minutes) + ":" + this.toDoubleDigit(seconds);
-        }
+        return this.toDoubleDigit(hours) + ":" + this.toDoubleDigit(minutes) + ":" + this.toDoubleDigit(seconds);
+        
     }
 
     static toDoubleDigit(paramInt){
